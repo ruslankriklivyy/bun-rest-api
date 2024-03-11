@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 
 import TokenService from "./TokenService.ts";
-import type { UserAuth } from "../types/entities/user/UserAuth";
+import type { SignInPayload } from "../types/entities/auth/SignInPayload";
 
 class AuthService {
   private readonly prisma = new PrismaClient();
 
-  async signIn({ email, password }: UserAuth) {
+  async signIn({ email, password }: SignInPayload) {
     try {
       const user = await this.prisma.user.findUnique({
         where: { email },
