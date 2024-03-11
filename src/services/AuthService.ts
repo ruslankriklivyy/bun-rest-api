@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import TokenService from "./TokenService.ts";
-import type { SignInPayload } from "../types/entities/auth/SignInPayload";
+import type { SignInPayload } from "@/types/entities/auth/SignInPayload";
 
 class AuthService {
   private readonly prisma = new PrismaClient();

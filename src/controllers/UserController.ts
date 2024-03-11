@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import { omit } from "lodash";
 
-import UserService from "../services/UserService.ts";
+import UserService from "@/services/UserService.ts";
 
 class UserController {
-  async findAll(req: Request, res: Response) {
+  async findAll(_: Request, res: Response) {
     try {
       const users = await UserService.findAll();
       res.json(users);
@@ -30,4 +30,4 @@ class UserController {
   }
 }
 
-export default new UserController();
+export default UserController;

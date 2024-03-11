@@ -1,10 +1,17 @@
 import type { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import { Server } from "socket.io";
 
-import TaskService from "../services/TaskService.ts";
-import type { RequestAuth } from "../types/common/RequestAuth";
+import TaskService from "@/services/TaskService";
+import type { RequestAuth } from "@/types/common/RequestAuth";
 
 class TaskController {
+  private socket: Server;
+
+  constructor(socket: Server) {
+    this.socket = socket;
+  }
+
   async findAll(req: Request, res: Response) {
     try {
       const tasks = await TaskService.findAll({
@@ -44,6 +51,8 @@ class TaskController {
         ...req.body,
         user_id: (req as RequestAuth).user.id,
       });
+
+      this.socket.emit("TASKS:TASK_CREATED", createdTask);
       res.json(createdTask);
     } catch (error) {
       res.status(500).json({
@@ -76,6 +85,8 @@ class TaskController {
     try {
       const taskId = +req.params.id;
       const deletedTask = await TaskService.deleteOne(taskId);
+
+      this.socket.emit("TASKS:TASK_DELETED");
       res.json(deletedTask);
     } catch (error) {
       res.status(500).json({
@@ -86,4 +97,4 @@ class TaskController {
   }
 }
 
-export default new TaskController();
+export default TaskController;
